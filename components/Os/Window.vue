@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute z-10 bg-slate-400 h-[500px]" :style="{ top: posY + 'px', left: posX + 'px', }">
+    <div class="absolute z-10 bg-slate-400" :style="{ top: posY + 'px', left: posX + 'px', width: window?.width + 'px', height: window?.height + 'px' }">
         <div class="h-full w-full border-t-2 border-t-gray-400 border-l-2 border-l-gray-100 border-b-4 border-b-gray-600 border-r-4 border-r-gray-600 flex flex-col">
             <!-- Header -->
             <div ref="header" class="flex h-8 w-full bg-blue-800 cursor-move z-20 pl-2 flex-shrink-0"
