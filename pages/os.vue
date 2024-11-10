@@ -14,19 +14,19 @@
 
 <script setup lang="ts">
 import type { OsWindow } from '~/types/Window';
-import { watch } from 'vue';
-// LEFTOFF: 1:00:00 need to design pages inside of the windows component, need to provide a /blog route for if someone wants to not use the cool web os, as well as a standard alternative site. 
-// should design a taskbar too (clock in bottom corner?)
+import { markRaw } from 'vue';
+import Greeting from '~/components/Greeting.vue';
 // Icons/assets needed rn. Done with pixel art
 /*
 - [ ] Background
-- [ ] Icons for desktop shortcuts (little arrow, folder, etc)
+- [ ] Icons for desktop shortcuts (little arrow shortcut, back button, folder, etc)
 - [ ] Icons for taskbar (start menu, clock)
 - [ ] Icons for windows (close, minimize, maximize, resizer bottom right)
 - [ ] contact me (email icon, linkedin icon, github icon) (all pixel art/icon)
 - [X] font 
 
 */
+const rawGreeting = markRaw(Greeting);
 
 const windows = useState<OsWindow[]>('windows', () => [])
 
@@ -34,5 +34,19 @@ function closeWindow(id: number) {
     windows.value = windows.value.filter(window => window.id !== id);
 }
 
+onMounted(() => {
+    const docWidth = document.documentElement.clientWidth;
+    const docHeight = document.documentElement.clientHeight;
+    windows.value.push({
+    id: 1,
+    title: 'Welcome',
+    'slot': rawGreeting,
+    posX: docWidth / 2 - 200,
+    posY: docHeight / 2 - 200,
+    width: 700,
+    height: 350,
+    zIndex: 1
+})
+})
 </script>
 
