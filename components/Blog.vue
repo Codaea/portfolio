@@ -44,8 +44,8 @@ function addWindow(component: Component, title: string) {
         slot: markRaw(component),
         posX: 150,
         posY: 150,
-        width: 0,
-        height: 0,
+        width: 600,
+        height: 700,
         zIndex: 0
     });
     console.log(windows);

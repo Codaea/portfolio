@@ -50,8 +50,8 @@ function handleClick(shortcut: Shortcut) {
             slot: markRaw(component),
             posX: 150,
             posY: 150,
-            width: 0,
-            height: 0,
+            width: 700,
+            height: 500,
             zIndex: 0
         });
     }
