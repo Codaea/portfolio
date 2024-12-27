@@ -1,6 +1,8 @@
 ---
 title: 'The Making of Shittyrobots.net'
 description: 'how many robot ideas exist?'
+image: "/img/content/things/shittyrobot/cover.png"
+date: "10/4/2024"
 ---
 
 all the robot ideas you could ever wish for. check them out at [shittyrobots.net](https://shittyrobots.net) 
