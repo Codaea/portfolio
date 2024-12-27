@@ -16,92 +16,111 @@ In his early days on youtube, he did videos with viewer suggested ideas, prompti
 
 Theres not much you can really do to validate a idea like this, besides explain it to someone next to you, so I kind of just skipped to designing and building.
 
-# The Steps 
+# Challenges
 
-I scraped comments through the youtube data api, with a total of 800,000 comments off his top videos. This made for a 42 mb csv, with just over 1 million lines (comments can be multiple lines because I didn't sanitize input very well)
+## Scraping Through The Data
 
-![[Pasted image 20241008210053.png]]
-<figcaption>almost hitting my api limit in one day of scraping</figcaption>
+copying and pasting comments from youtube is slow, but need not worry, google provides the [youtube data api](https://developers.google.com/youtube/v3/docs).
+Getting comments only costs 1 point towards quota, and one query would return about 100 comments (from what I remeber)
 
-I started sifting through by using regex to find lines that contained the phrase "build a robot that".
+the youtube api quota for free is 10,000 credits (or dubloons? the currency doesn't have a name!), meaning its possible to scrape up to 1,000,000 comments a day.
 
-#todo: regex examples?
+![using 70% of my youtube data api quota](/img/content/things/shittyrobot/quotausage.png)
+<figcaption>This API comment scraping limit is violently high</figcaption>
 
-from this, I only matched 20,407 comments. I thought to myself, "oh well, I thought there would be more ideas, but 20,000 more than I was hoping for anyways" 
+I went for reeves's most popular videos, working from most views down to least.
+In the end, I scraped over 800,000 comments. this was all compiled into a csv, totaling just over 1 million lines, and was a 42mb csv.
 
-Then out of the corner of my eye, I noticed another comment, 
-  
+## The Sort
+
+people don't just exclusivly comment robot ideas, they comment other stuff too. How do we filter for comments that contain robot ideas? 
+
+There is multiple ways to go about sorting for robot ideas in the comment
+
+- Natural language processing (AI)
+- regex (find) a bunch of diffren't words that are used in phrases where people explain their robot idea, and extract those comments
+
+I opted for the second (mostly because I didn't even know the first existed yet)
+
+my first regex query was "build a robot that"
+
+This only got 20,000 results,
+for the moment I though 20,000 out of 800,000 comments was pretty good, and more robot ideas than I would ever read in one sitting.
+
+However, as I was scrolling through all the comments, I saw one that stood out.
+
 > "make a remote control mini fridge when it can drive you some drinks"
 
-people used other words than "build a robot" to convey their ideas, and I needed to be looking for other verbs too.
+this is when I realized, there is multiple ways in english to tell someone your robot idea.
 
-The final list of regex searches I used was:
-- "build a robot"
-- "make a robot"
-- "build a" (sometimes people wouldn't even say robot!)
-- "make a"
+You could say, "make a robot", "design a robot". You don't even have to say robot!
+"build a machine"
 
-out of the 800,000 comments I started with, I got 
+This is when I realized that Natural Language processing would solve this problem, but only at the cost of my wallet.
+
+Natural Language Processing (NLP) is the processes of interperting the meaning behind a phrase or sentence to try and figure out what it means. For my case, I needed to distinguish between robot ideas and not robot ideas.
+
+Instead of learning and messing with all that fancy stuff though, I sat down and brainstormed a list of words that would find robot ideas.
+
+In the end, out of the 800,000 comments I started with, I got 
 - 20,407 matches for "build a robot"
 - 54,889 matches for "make a robot"
 - 33,388 matches for "build a"
-- 53,459 matches for "make a" (excluding robot at the end)
+- 53,459 matches for "make a" (excluding those where robot was the next word)
 
+This came out to just over 160,000 comments that contained robot ideas.
 
-this came out to just over 160,000 comments that contained robot ideas.
-
-I found lots of little interesting tidbits from the dataset through exploring it, but that could beits own post.
+I found lots of little interesting tidbits from the dataset through exploring it, but that could be it's own post.
 
 ## The Website
 
-Now that I had the robot ideas, I needed to build the website portion.
+not much to say here, went with nuxt and supabase from past experience, and desire to not hate myself
 
-I opted for Nuxt with Supabase, because of my familiarity with the framework (and PaaS!) because of my existing skillset working with it and postgresql.
+## Postgres optimization
 
-## Backend
+I had my table of robot ideas, and knew I wanted to add voting, but I was unsure how to do it in a way where it was possible to detect/track mass voting/extreme botting.
 
-I had my data, and knew I wanted to track the time votes came in (preventing bots) but I wasn't sure how to integrate it without left table joins every time a user refreshed the page
+I knew botting could and would happen, but my primary goal was to know, not to prevent botting.
+If a idea was intresting enough for someone to write a bot to vote for it, It had to have been a worthy idea.
 
-![[Pasted image 20241008211910.png|600]]
+However, in order to have track votes, I would have to have two seperate tables, and in order to show a table of current votes for a idea AND be able to track votes, a table join operation would be required every refresh!
+
+![/img/content/things/shittyrobot/databaseschema.png]
 <figcaption>my schema visualized</figcaption>
 
-**Introducing, Materialized Views** - a way to save resources for expensive queries where information doesn't need to be all the way up to date. a refreshable table basically
+This is where **Materialized Views** come to the rescue. 
 
-<details>
-	<summary>SQL Example</summary>
+Materialized Views offer a way to save resouces on expensive queries, (like massive table joins) at the cost of information not being latest.
 
-	creating a materialized view
+In other words, Its a table that is created from the response to a set query, that was run in the past.
+
+in postgresql, you can create a materialized view like this
+
+```sql
+CREATE MATERIALIZED VIEW
+materialized_table AS
+SELECT * FROM
+table LEFT JOIN other_table ON table.id = other_table.id;
+```
 	
-	```sql
-	CREATE MATERIALIZED VIEW
-	materialized_table AS
-	SELECT * FROM
-	table LEFT JOIN other_table ON table.id = other_table.id;
-	```
-	
-	and they can be refreshed through running
-	
-	```sql
-	REFRESH MATERIALIZED VIEW materialized_table
-	```
-</details>
+materialized views can be refreshed by running	
 
-I'm not a stock exchange, we don't need realtime updates for every user, data being stale is ok.
+```sql
+REFRESH MATERIALIZED VIEW materialized_table
+```
 
-using [pgcron](https://github.com/citusdata/pg_cron), I setup hourly refreshes of the table that gets queried whenever you use the site.
+I'm not a stock exchange, we don't need realtime updates for everyone, data being stale is ok.
 
-### Preventing Botting
+using [pgcron](https://github.com/citusdata/pg_cron), I setup hourly refreshes of the materialized view that gets queried whenever someone visits the site.
 
-a hope and a prayer was all i had, I'm not to worried about mass voting, and I'm excited to see where the leaderboard takes us. if it takes botting to win, let it be.
+## Marketing 
 
-## Frontend
+how does anyone build a audience? I still have no idea. I posted on hackernews, twitter and a few other places, but it never really took off. 
 
-I learned a lot less when working on this frontend, besides that shadcn-vue was still a little underdeveloped compared to other competitors, and I landed on NuxtUI. 
+Then again, its just a social experiment. Maybe one day in the distant future I'll be cool.
 
-Double voting prevention was kind of a second thought, and currently its bypassed by a page refresh.
+# Wrapping up
 
-## Lessons Learnt.
+how does one end a blog? lets just try like this
 
-I need to work on marketing, I'm not quite sure how to make a app grow naturally.
-
-
+I definetly learned quite a bit throughout this, and I hope you did too. In the end, it was just another shower though that got me here, and at the end, it will be another shower thought that gets me distracted from schoolwork for another week or two.
