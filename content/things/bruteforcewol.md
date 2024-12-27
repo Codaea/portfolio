@@ -1,7 +1,7 @@
 ---
 title: 'Brute Forcing Wake On Lan'
 description: "this can't be a bad idea, right?"
-image: "public/" # prefer 1920x1080?
+image: "/img/content/things/bruteforcewol/cover.png" # prefer 1920x1080?
 date: "Sometime in October 2024"
 ---
 
