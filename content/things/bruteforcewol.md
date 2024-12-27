@@ -10,12 +10,16 @@ Last night, I set a VM (virtual machine) to restore from a backup. I went to bed
 I thought to myself, "it must of crashed last night during the restore when trying to start back up, I just need to turn it back on." 
 How Naive of past me to think that.
 
+however, before I take you through my day of shenanigans, lets start at the begining.
+
 ## What is Wake on lan?
 
 Wake on lan (Wol) is a networking standard that allows computers to be awoken from sleep through sending a magic packet. 
 The "magic packet" is actually just a broadcast frame (ignore fancy layer 2 networking words) that contains the target's MAC address, then repeats it 16x more. 
+because broadcast frames are layer two, it has no idea what a network is, and therefore only works in local networks. (or a layer 2 vpn)
 
-I needed the target's computer mac address, having no idea what it was.
+The big problem wasn't the vpn connection in, but rather the mac address.
+in order to use WOL on the computer I needed the target's computer mac address, having no idea what it was.
 
 ## The Journey
 
@@ -42,7 +46,7 @@ This left me with two options. I could try either
 
 ## *OR*
 
-- search the last two blocks, hoping that it shares the 4th block because they were bought in a pair from a bulk reseller I THINK THIS MIGHT BE A RUN ON SENTENCE (I've had luck on other devices being sequential mac addresses.) (65,536 addresses)
+- search the last two blocks, hoping that it shares the 4th block because they were bought in a pair from a bulk reseller. (I've had luck on other devices being sequential mac addresses.) (65,536 addresses)
 
 
 I opted for the second, doing the first if I got no hits from it.
@@ -76,5 +80,7 @@ I realized at this point, I was better off waiting for school to get out.
 For as why none of it worked, Most likely I never even turned wake on lan on. I never got into troubleshooting what the root cause was either. 
 
 Oh, and i just looked, its mac address is `c4:65:16:b6:ff:3d`. It didn't even share the same 3rd block.
+
+Moral of the story, don't try brute forcing wake on lan unless you know if you actually enabled it in the bios.
 
 [^1]: Vendor mac addresses are the first 24 bits `00:1A:2B`, that are decided by the device's manufacturer. [more here.](https://www.geeksforgeeks.org/mac-address-in-computer-network/)
