@@ -1,6 +1,7 @@
 ---
 title: "Getting My Chrome Statistics Into Grafana"
 description: ""
+draft: true
 ---
 
 

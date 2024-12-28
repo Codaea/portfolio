@@ -29,13 +29,10 @@ Wait! Proxmox's Web GUI has a built in wake on lan menu! I can just use that!
 *If only everything was this easy, right?*
 
 Nope.
-
 Proxmox didn't know the host's mac address, and neither did I.
 
 The wild goosechase had started. 
-I log into my router to check the dhcp server, only to realize I set the hosts I.P. addresses staticly.
-
-But not all is lost, I know the vendor mac address[1^], and I bought pve2 and pve3 in a bundle!
+I log into my router to check the dhcp server, only to realize I set the hosts I.P. addresses staticly. But not all is lost, I know the vendor mac address[1^], and I bought pve2 and pve3 in a bundle!
 
 ![photo of homelab](/img/content/things/bruteforcewol/homelab.jpg)
 *my homelab setup*
@@ -51,7 +48,7 @@ This left me with two options. I could try either
 
 I opted for the second, doing the first if I got no hits from it.
 
-```sh
+```bash [bruteforcewol.bash]
 # Define the known part of the MAC address (vendor prefix)
 vendor_prefix="c4:65:16:b8"
 

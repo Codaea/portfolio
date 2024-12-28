@@ -5,7 +5,7 @@ image: "/img/content/things/shittyrobot/cover.png"
 date: "10/4/2024"
 ---
 
-all the robot ideas you could ever wish for. check them out at [shittyrobots.net](https://shittyrobots.net) 
+all the robot ideas you could ever wish for. Check them out at [shittyrobots.net](https://shittyrobots.net) 
 
 ## Background
 
@@ -17,8 +17,6 @@ In his early days on youtube, he did videos with viewer suggested ideas, prompti
 > What if we got all the robot ideas from the comment section, and let people vote on them?
 
 Theres not much you can really do to validate a idea like this, besides explain it to someone next to you, so I kind of just skipped to designing and building.
-
-# Challenges
 
 ## Scraping Through The Data
 
