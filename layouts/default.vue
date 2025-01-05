@@ -5,6 +5,17 @@
             <slot />
         </div>
     </div>
-
-
 </template>
+
+<script setup lang="ts">
+const route = useRoute()
+
+useHead({
+    title: `${route.meta.title} - Codaea`,
+    meta: [
+        {
+            property: 'og:title', content: `${route.meta.title} - Codaea`,
+        }
+    ]
+});
+</script>

@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-    title: 'Dakota Roth',
+    title: 'Blog',
 })
 
 const { data: posts } = await useAsyncData('home', () => queryContent('/things').find());

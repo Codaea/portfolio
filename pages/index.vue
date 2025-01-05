@@ -26,6 +26,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  title: 'Home',
+})
 const { data } = useAsyncData('things', () =>
   queryContent('/things').limit(3).sort({ date: 1, $numeric: true }).find()
 );
