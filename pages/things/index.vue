@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <h1 class="text-8xl p-5">Things I've Done</h1>
+        <h1 class="text-8xl p-5">Things I've Made</h1>
         <div v-if="posts" class="space-y-5">
             <div v-for="post in posts" :key="post._path">
                 <div class="">
