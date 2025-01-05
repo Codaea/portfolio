@@ -119,7 +119,7 @@ how does anyone build a audience? I still have no idea. I posted on hackernews, 
 
 Then again, its just a social experiment. Maybe one day in the distant future I'll be cool.
 
-# Wrapping up
+## Wrapping up
 
 how does one end a blog? lets just try like this
 
