@@ -12,10 +12,10 @@
         <div
           class="w-1/4 min-w-64 p-4 bg-[#bac0ca] border-4 border-t-gray-100 border-l-gray-100 border-r-gray-600 border-b-gray-600 focus:border-black focus:border-t-2 focus:border-l-2"
         >
-          <NuxtLink :to="post._path">
+          <NuxtLink :to="post.path">
             <img class="rounded-md drop-shadow-lg" :src="post.image" />
           </NuxtLink>
-          <NuxtLink :to="post._path" class="text-xl">
+          <NuxtLink :to="post.path" class="text-xl">
             {{ post.title }}</NuxtLink
           >
           <p class="italic">{{ post.description }}</p>
@@ -29,7 +29,8 @@
 definePageMeta({
   title: 'Home',
 })
+
 const { data } = useAsyncData('things', () =>
-  queryContent('/things').limit(3).sort({ date: 1, $numeric: true }).find()
+  queryCollection("things").order('date', 'DESC').limit(3).all()
 );
 </script>

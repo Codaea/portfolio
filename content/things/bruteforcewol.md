@@ -2,7 +2,7 @@
 title: 'Brute Forcing Wake On Lan'
 description: "this can't be a bad idea, right?"
 image: "/img/content/things/bruteforcewol/cover.png" # prefer 1920x1080?
-date: "Sometime in October 2024"
+date: "2024-10-04"
 ---
 
 Last night, I set a VM (virtual machine) to restore from a backup. I went to bed, and when I woke up, the hypervisor was offline.
