@@ -5,6 +5,34 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/content',
-    '@nuxtjs/storybook'
-  ]
-})
+  ],
+  content: {
+    documentDriven: {
+      injectPage: false,
+    },
+    highlight: {
+      theme: {
+        default: 'github-light',
+        dark: 'github-dark',
+      },
+      langs: [
+        'typescript',
+        'bash',
+        'json',
+        'yaml',
+        'sql',
+      ]
+    }
+  },
+  tailwindcss: {
+    config: {
+      theme: {
+        extend: {
+          fontFamily: {
+            'w95': ['/public/w95a.woff2']
+          }
+        }
+      }
+    }
+  }
+});
